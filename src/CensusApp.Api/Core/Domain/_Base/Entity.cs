@@ -3,14 +3,16 @@ using System;
 
 namespace CensusApp.Api.Core.Domain._Base
 {
-    public class Entity<T>:Notifiable<T> where T:Notification
+    public class Entity:Notifiable<Notification>
     {
+        public Guid Id { get; private set; }
         public DateTime CriadoEm { get; private set; }
         public DateTime AlteradoEm { get; private set; }
         public DateTime ExcluidoEm { get; private set; }
 
         public Entity()
         {
+            Id = Guid.NewGuid();
             CriadoEm = DateTime.Now;
         }
         protected void Update()
