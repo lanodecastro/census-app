@@ -1,10 +1,14 @@
 ﻿using Flunt.Notifications;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 
 namespace CensusApp.Api.Core.Domain._Base
 {
     public class Entity:Notifiable<Notification>
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.String)]
         public Guid Id { get; private set; }
         public DateTime CriadoEm { get; private set; }
         public DateTime AlteradoEm { get; private set; }
@@ -15,11 +19,11 @@ namespace CensusApp.Api.Core.Domain._Base
             Id = Guid.NewGuid();
             CriadoEm = DateTime.Now;
         }
-        protected void Update()
+        public void Update()
         {
             AlteradoEm = DateTime.Now;
         }
-        protected void Delete()
+        public void Delete()
         {
             ExcluidoEm = DateTime.Now;
         }

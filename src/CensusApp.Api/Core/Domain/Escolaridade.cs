@@ -3,6 +3,7 @@ using CensusApp.Api.Core.Domain.Vo;
 
 namespace CensusApp.Api.Core.Domain
 {
+    [BsonCollection("Escolaridade")]
     public class Escolaridade : Entity
     {
         public Escolaridade(string descricao)

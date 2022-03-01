@@ -3,6 +3,7 @@ using CensusApp.Api.Core.Domain.Vo;
 
 namespace CensusApp.Api.Core.Domain
 {
+    [BsonCollection("RacaCor")]
     public class RacaCor : Entity
     {
         public RacaCor(string descricao)

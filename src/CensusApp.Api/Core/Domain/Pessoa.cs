@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 namespace CensusApp.Api.Core.Domain
 {
+    [BsonCollection("Pessoa")]
     public class Pessoa : Entity
     {
         public Pessoa(string nome, string sobrenome, RacaCor racaCor, Escolaridade escolaridade, Filiacao filiacao)
