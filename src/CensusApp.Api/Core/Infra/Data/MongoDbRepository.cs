@@ -1,6 +1,5 @@
 ﻿using CensusApp.Api.Core.Domain._Base;
 using MongoDB.Driver;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,7 +10,7 @@ namespace CensusApp.Api.Core.Infra.Data
         private readonly IMongoCollection<TEntity> _collection;
         public MongoDbRepository(IMongoDatabase mongoDatabase)
         {
-            _collection = mongoDatabase.GetCollection<TEntity>(GetCollectionName(typeof(TEntity)));
+            _collection = mongoDatabase.GetCollection<TEntity>(GetCollectionName());
         }
         public void Add(TEntity obj)
         {
@@ -38,11 +37,9 @@ namespace CensusApp.Api.Core.Infra.Data
         {
             return _collection.Find(FilterById(id)).FirstOrDefault();
         }
-        private string GetCollectionName(Type documentType)
+        private string GetCollectionName()
         {
-            return ((BsonCollectionAttribute)documentType.GetCustomAttributes(
-                    typeof(BsonCollectionAttribute), true)
-                .FirstOrDefault())?.CollectionName;
+            return ToString().GetType().Name;
         }
         private FilterDefinition<TEntity> FilterById(object id)
         {
