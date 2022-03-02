@@ -5,7 +5,7 @@ using System;
 
 namespace CensusApp.Api.Core.Domain.Commands.CriarPessoa
 {
-    public class CriarPessoaRequest : NotifiableCommand<Notification, Guid>
+    public class CriarPessoaRequest : NotifiableCommand<Notification, string>
     {
         public string Nome { get; set; }
         public string Sobrenome { get; set; }
