@@ -1,4 +1,7 @@
 using CensusApp.Api.Config.MongoDb;
+using CensusApp.Api.Core.Domain._Base;
+using CensusApp.Api.Core.Infra.Data;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +14,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace CensusApp.Api
@@ -27,6 +31,9 @@ namespace CensusApp.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMongoDb(Configuration);
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddScoped(typeof(IRepository<>), typeof(MongoDbRepository<>));
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -42,6 +49,8 @@ namespace CensusApp.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CensusApp v1"));
             }
 
+            app.UseHttpsRedirection();
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -49,6 +58,7 @@ namespace CensusApp.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/healthcheck");
             });
         }
     }
