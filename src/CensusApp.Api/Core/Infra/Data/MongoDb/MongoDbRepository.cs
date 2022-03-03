@@ -3,7 +3,7 @@ using MongoDB.Driver;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CensusApp.Api.Core.Infra.Data
+namespace CensusApp.Api.Core.Infra.Data.MongoDb
 {
     public class MongoDbRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
     {

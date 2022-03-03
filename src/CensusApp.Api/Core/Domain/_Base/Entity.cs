@@ -9,14 +9,16 @@ namespace CensusApp.Api.Core.Domain._Base
     {
         [BsonId]
         [BsonRepresentation(BsonType.String)]
-        public Guid Id { get; private set; }
+        public string Id { get; private set; }
         public DateTime CriadoEm { get; private set; }
         public DateTime AlteradoEm { get; private set; }
         public DateTime ExcluidoEm { get; private set; }
 
-        public Entity()
+        public Entity(string id=null)
         {
-            Id = Guid.NewGuid();
+            if(id is null)
+                Id = Guid.NewGuid().ToString();
+
             CriadoEm = DateTime.Now;
         }
         public void Update()
