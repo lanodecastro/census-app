@@ -5,7 +5,9 @@ using CensusApp.Api.Core.Infra.Data.Queries;
 using CensusApp.Api.Core.Infra.Data.Queries.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using MongoDB.Driver;
+using PainelOuvidoria.Api.Hubs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,14 +17,13 @@ namespace CensusApp.Api.Controllers
     [ApiController]
     public class PessoaController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        private readonly IMongoDatabase _mongoDatabase;
-        private readonly IMapper _mapper;
-        public PessoaController(IMediator mediator, IMongoDatabase mongoDatabase, IMapper mapper)
+        private readonly IMediator _mediator;       
+        private readonly IHubContext<RealtimeMessages> _hubContext;
+
+        public PessoaController(IMediator mediator, IHubContext<RealtimeMessages> hubContext)
         {
             _mediator = mediator;
-            _mongoDatabase = mongoDatabase;
-            _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         [HttpPost, Route("")]
@@ -33,24 +34,15 @@ namespace CensusApp.Api.Controllers
             if (!command.IsValid)
                 return BadRequest(command.Notifications);
 
+            await _hubContext.Clients.All.SendAsync("notify",command.Response);
+
             return Ok(command.Response);
-        }
-
-        [HttpGet]
-        public IActionResult All()
-        {
-            var pessoas = _mongoDatabase.GetCollection<Pessoa>("Pessoa")
-                .AsQueryable()
-                .ToList();
-            return Ok(_mapper.Map<IList<PessoaViewModel>>(pessoas));
-
         }
 
         [HttpPost,Route("query")]
         public async Task<IActionResult> ConsultarPessoa([FromBody] ConsultarPessoa query)
         {
             var result=await _mediator.Send(query);
-
             return Ok(result);
         }
 

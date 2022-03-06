@@ -55,7 +55,6 @@ namespace CensusApp.Api.Core.Domain.Commands.CriarPessoa
 
             if (!command.IsValid) return;
 
-
             var pessoa = new Pessoa(command.Nome, command.Sobrenome, racaCor, escolaridade, regiao, pai.Id, mae.Id);
             command.AddNotifications(pessoa);
 
@@ -64,6 +63,7 @@ namespace CensusApp.Api.Core.Domain.Commands.CriarPessoa
             _pessoaRepository.Insert(pessoa);
 
             command.Response = pessoa.Id;
+            
         }
         private Tuple<Escolaridade, RacaCor, Regiao> ResolverReferencias(string idEscolaridade, string idRacaCor, string idRegiao)
         {

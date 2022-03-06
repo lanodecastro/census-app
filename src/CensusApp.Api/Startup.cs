@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
+using PainelOuvidoria.Api.Hubs;
+using System;
 using System.Reflection;
 
 namespace CensusApp.Api
@@ -29,22 +31,26 @@ namespace CensusApp.Api
             {
                 options.AddPolicy("CorsPolicy", builder =>
                 {
+                    string[] origins = { "http://localhost:4200" };
                     builder
-                        .WithOrigins("http://localhost:4200")
+                        .WithOrigins(origins)
                         .AllowAnyMethod()
-                        .AllowAnyHeader();
+                        .AllowAnyHeader()
+                        .SetIsOriginAllowed((host) => true);
                 });
             });
+            services.AddSignalR();
             services.AddMongoDb(Configuration);
             services.AddSingleton(AutoMapperConfig.InitializeMapper());
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IRepository<>), typeof(MongoDbRepository<>));
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CensusApp", Version = "v1" });
             });
-            services.AddSignalR();
+
 
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMongoDatabase mongoDatabase)
@@ -58,7 +64,12 @@ namespace CensusApp.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CensusApp v1"));
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
+
+            app.UseWebSockets(new WebSocketOptions
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
+            });
 
             app.UseRouting();
 
@@ -68,6 +79,7 @@ namespace CensusApp.Api
             {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/healthcheck");
+                endpoints.MapHub<RealtimeMessages>("/real-time");
             });
         }
     }
