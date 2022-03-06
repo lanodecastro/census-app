@@ -1,4 +1,5 @@
-﻿using CensusApp.Api.Core.Domain._Base;
+﻿using CensusApp.Api.Core.Domain;
+using CensusApp.Api.Core.Infra.Data.MongoDb.Extensions;
 using MongoDB.Driver;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,13 +11,13 @@ namespace CensusApp.Api.Core.Infra.Data.MongoDb
         private readonly IMongoCollection<TEntity> _collection;
         public MongoDbRepository(IMongoDatabase mongoDatabase)
         {
-            _collection = mongoDatabase.GetCollection<TEntity>(GetCollectionName());
+            _collection = mongoDatabase.GetCollection<TEntity>();
         }
-        public void Add(TEntity obj)
+        public void Insert(TEntity obj)
         {
             _collection.InsertOne(obj);
         }
-        public Task AddAsync(TEntity obj)
+        public Task InsertAsync(TEntity obj)
         {
             return _collection.InsertOneAsync(obj);
         }
@@ -36,10 +37,6 @@ namespace CensusApp.Api.Core.Infra.Data.MongoDb
         public TEntity Get(object id)
         {
             return _collection.Find(FilterById(id)).FirstOrDefault();
-        }
-        private string GetCollectionName()
-        {
-            return ToString().GetType().Name;
         }
         private FilterDefinition<TEntity> FilterById(object id)
         {

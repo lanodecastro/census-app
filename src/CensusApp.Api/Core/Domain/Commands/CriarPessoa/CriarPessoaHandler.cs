@@ -1,8 +1,11 @@
-﻿using CensusApp.Api.Core.Domain._Base;
-using CensusApp.Api.Core.Domain.Commands._Base;
+﻿using CensusApp.Api.Core.Domain.Commands._Base;
+using CensusApp.Api.Core.Domain.Model;
+using CensusApp.Api.Core.Infra.Data.Queries;
 using Flunt.Notifications;
 using Flunt.Validations;
+using MediatR;
 using System;
+using System.Linq;
 
 namespace CensusApp.Api.Core.Domain.Commands.CriarPessoa
 {
@@ -11,50 +14,72 @@ namespace CensusApp.Api.Core.Domain.Commands.CriarPessoa
         private readonly IRepository<Pessoa> _pessoaRepository;
         private readonly IRepository<Escolaridade> _escolaridadeRepository;
         private readonly IRepository<RacaCor> _racaCorRepository;
-        public CriarPessoaHandler(IRepository<Pessoa> pessoaRepository, IRepository<Escolaridade> escolaridadeRepository, IRepository<RacaCor> racaCorRepository)
+        private readonly IRepository<Regiao> _regiaoRepository;
+        private readonly IMediator _mediator;
+        public CriarPessoaHandler(IRepository<Pessoa> pessoaRepository, IRepository<Escolaridade> escolaridadeRepository, IRepository<RacaCor> racaCorRepository, IRepository<Regiao> regiaoRepository, IMediator mediator)
         {
             _pessoaRepository = pessoaRepository;
             _escolaridadeRepository = escolaridadeRepository;
             _racaCorRepository = racaCorRepository;
+            _regiaoRepository = regiaoRepository;
+            _mediator = mediator;
         }
-
         protected override void PrepareCommand(CriarPessoaRequest command)
         {
-            var mae = _pessoaRepository.Get(command.Mae);
-            var escolaridade = _escolaridadeRepository.Get(command.Escolaridade);
-            var racaCor = _racaCorRepository.Get(command.RacaCor);
-            Pessoa pai = null;
-
-            command.AddNotifications(new Contract<Notification>()
-                         .Requires()
-                         .IsNotNull(mae, "mae_valid", "Referência inválida para o atributo Mae")
-                         .IsNotNull(escolaridade, "escolaridade_valid", "Referência inválida para o atributo Escolaridade ")
-                         .IsNotNull(racaCor, "racaCor_valid", "Referência inválida para o atributo Raca/Cor inválida")
-                         );
-
-            if (string.IsNullOrEmpty(command.Pai))
-            {
-                pai = _pessoaRepository.Get(command.Pai);
-                if (pai is null)
-                    command.AddNotification("pai_valid", "Referência inválida para o atributo Pai");
-            }
+            var referencias = ResolverReferencias(command.Escolaridade.Id, command.RacaCor.Id, command.Regiao.Id);
 
             if (!command.IsValid) return;
 
-            var pessoa = new Pessoa(command.Nome, command.Sobrenome, racaCor, escolaridade, mae, pai);
+            var escolaridade = referencias.Item1;
+            var racaCor = referencias.Item2;
+            var regiao = referencias.Item3;
 
-            _pessoaRepository.Add(pessoa);
+
+            var pai = _mediator.Send(new ConsultarPessoa()
+            {
+                NomeSobrenome = command.NomePai,
+                IgnoreDeletedItens = false
+            }).Result.FirstOrDefault();
+
+            var mae = _mediator.Send(new ConsultarPessoa()
+            {
+                NomeSobrenome = command.NomeMae,
+                IgnoreDeletedItens=false
+            }).Result.FirstOrDefault();
+
+
+            command.AddNotifications(new Contract<Notification>()
+                        .Requires()
+                        .IsNotNull(pai, "pai_is_not_null", "Pai não encontrado")
+                        .IsNotNull(mae, "mae_is_not_null", "Mãe não encontrada"));
+
+            if (!command.IsValid) return;
+
+
+            var pessoa = new Pessoa(command.Nome, command.Sobrenome, racaCor, escolaridade, regiao, pai.Id, mae.Id);
+            command.AddNotifications(pessoa);
+
+            if (!command.IsValid) return;
+
+            _pessoaRepository.Insert(pessoa);
 
             command.Response = pessoa.Id;
         }
-        private Tuple<string, string> ExtrairNomeSobrenome(string nomeSobrenome)
+        private Tuple<Escolaridade, RacaCor, Regiao> ResolverReferencias(string idEscolaridade, string idRacaCor, string idRegiao)
         {
-            var nomeSobrenomeArray = nomeSobrenome.Split(' ');
+            var escolaridade = _escolaridadeRepository.Get(idEscolaridade);
+            var racaCor = _racaCorRepository.Get(idRacaCor);
+            var regiao = _regiaoRepository.Get(idRegiao);
 
-            if (nomeSobrenomeArray.Length != 2)
-                return null;
+            //command.AddNotifications(new Contract<Notification>()
+            //             .Requires()
+            //             .IsNotNull(escolaridade, "escolaridade_invalid", "Referência inválida para o atributo Escolaridade ")
+            //             .IsNotNull(racaCor, "racaCor_invalid", "Referência inválida para o atributo Raca/Cor")
+            //             .IsNotNull(regiao, "regiao_invalid", "Referência inválida para o atributo Regiao")
+            //             );
 
-            return new Tuple<string, string>(nomeSobrenomeArray[0], nomeSobrenomeArray[1]);
+            return new Tuple<Escolaridade, RacaCor, Regiao>(escolaridade, racaCor, regiao);
         }
+
     }
 }

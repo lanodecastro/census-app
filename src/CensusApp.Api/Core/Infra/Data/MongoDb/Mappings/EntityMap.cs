@@ -1,7 +1,7 @@
-﻿using CensusApp.Api.Core.Domain._Base;
+﻿using CensusApp.Api.Core.Domain;
 using MongoDB.Bson.Serialization;
 
-namespace CensusApp.Api.Core.Infra.Data.MongoDb.Maps
+namespace CensusApp.Api.Core.Infra.Data.MongoDb.Mappings
 {
     public class EntityMap : IMongoDbClassMap
     {
@@ -12,8 +12,11 @@ namespace CensusApp.Api.Core.Infra.Data.MongoDb.Maps
                 map.MapIdMember(x => x.Id);
                 map.SetIgnoreExtraElements(true);
                 map.MapMember(x => x.CriadoEm);
-                map.MapMember(x => x.AlteradoEm);
-                map.MapMember(x => x.ExcluidoEm);
+                map.MapMember(x => x.AlteradoEm)
+                .SetIgnoreIfNull(true);
+                map.MapMember(x => x.ExcluidoEm)
+                .SetIgnoreIfNull(true);
+
             });
         }
     }

@@ -1,7 +1,7 @@
+using CensusApp.Api.Config.AutoMapper;
 using CensusApp.Api.Config.MongoDb;
-using CensusApp.Api.Core.Domain._Base;
+using CensusApp.Api.Core.Domain;
 using CensusApp.Api.Core.Infra.Data.MongoDb;
-using CensusApp.Api.Core.Infra.Data.MongoDb.Maps;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
 using System.Reflection;
 
 namespace CensusApp.Api
@@ -25,28 +25,32 @@ namespace CensusApp.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder
+                        .WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
             services.AddMongoDb(Configuration);
-            services.AddSingleton<MongoDbMapping>(new MongoDbMapping()
-                .Add<EntityMap>()
-                .Add<EscolaridadeMap>()
-                .Add<RacaCorMap>()
-                .Add<PessoaMap>()
-                .Initialize()
-                );
+            services.AddSingleton(AutoMapperConfig.InitializeMapper());
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IRepository<>), typeof(MongoDbRepository<>));
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CensusApp", Version = "v1" });
             });
-
-
+            services.AddSignalR();
 
         }
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMongoDatabase mongoDatabase)
         {
+            app.UseCors("CorsPolicy");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -1,7 +1,8 @@
-﻿using CensusApp.Api.Core.Domain;
+﻿using CensusApp.Api.Core.Domain.Model;
 using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
 
-namespace CensusApp.Api.Core.Infra.Data.MongoDb.Maps
+namespace CensusApp.Api.Core.Infra.Data.MongoDb.Mappings
 {
     public class PessoaMap : IMongoDbClassMap
     {
@@ -14,8 +15,10 @@ namespace CensusApp.Api.Core.Infra.Data.MongoDb.Maps
                 map.MapMember(x => x.Sobrenome).SetIsRequired(false);
                 map.MapMember(x => x.RacaCor).SetIsRequired(true);
                 map.MapMember(x => x.Escolaridade).SetIsRequired(true);
-                map.MapMember(x => x.Mae).SetIsRequired(true);
-                map.MapMember(x => x.Pai).SetIsRequired(false);
+                map.MapMember(x => x.Regiao).SetIsRequired(true);
+                map.MapMember(x => x.IdPai).SetIsRequired(true);
+                map.MapMember(x => x.IdMae).SetIsRequired(true);
+
             });
         }
     }

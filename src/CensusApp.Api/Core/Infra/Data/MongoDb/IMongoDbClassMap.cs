@@ -1,4 +1,4 @@
-﻿namespace CensusApp.Api.Core.Infra.Data.MongoDb.Maps
+﻿namespace CensusApp.Api.Core.Infra.Data.MongoDb
 {
     public interface IMongoDbClassMap
     {

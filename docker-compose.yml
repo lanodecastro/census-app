@@ -5,9 +5,10 @@ services:
      image: mongo
      environment:
        MONGO_INITDB_ROOT_USERNAME: usrCensusApp
-       MONGO_INITDB_ROOT_PASSWORD: 1025@1064
+       MONGO_INITDB_ROOT_PASSWORD: z1x2c3v4b5n6m7
        MONGO_INITDB_DATABASE: dbCensusApp
      restart: always
+     container_name: mongoDb
      volumes:
             - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
      ports: 

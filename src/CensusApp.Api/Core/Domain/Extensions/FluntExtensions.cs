@@ -30,19 +30,23 @@ namespace CensusApp.Api.Core.Domain.Extensions
 
             return notifiable.Notifications.Any();
         }
-        public static bool CountNotificationEquals(this Notifiable<Notification> notifiable,int value)
+        public static bool CountNotificationEquals(this Notifiable<Notification> notifiable, int value)
         {
             return notifiable.Notifications.Count.Equals(value);
         }
-
         public static bool HasNotificationMessage(this Notifiable<Notification> notifiable, string message)
         {
             return notifiable.Notifications.Any(x => x.Message == message);
         }
-        public static Contract<Notification> JoinIsNotNull(this Contract<Notification> contract,Notifiable<Notification> obj)
+        public static Contract<Notification> IsNotNullOrEmptyWithDefaultMessage(this Contract<Notification> contract,string prop, string val)
         {
-            if (obj is not null)
-                contract.Join(obj);
+            contract.IsNotNullOrEmpty(val, $"{prop.ToLower()}_is_not_null", $"O valor atribuído para {prop} não pode ser nulo");
+
+            return contract;
+        }
+        public static Contract<Notification> IsNotNullWithDefaultMessage(this Contract<Notification> contract,string prop, object val)
+        {
+            contract.IsNotNull(val, $"{prop.ToLower()}_is_not_null", $"O valor atribuído para {prop} não pode ser nulo");
 
             return contract;
         }

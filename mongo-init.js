@@ -1,7 +1,7 @@
 db.createUser(
     {
         user: "usrCensusApp",
-        pwd: "1025@1064",
+        pwd: "z1x2c3v4b5n6m7",
         roles: [
             {
                 role: "readWrite",

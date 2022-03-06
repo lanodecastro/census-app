@@ -1,12 +1,11 @@
-﻿using CensusApp.Api.Core.Infra.Data.MongoDb.Maps;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace CensusApp.Api.Core.Infra.Data.MongoDb
 {
     public class MongoDbMapping
     {
-        private IList<IMongoDbClassMap> _mapList;
+        private readonly IList<IMongoDbClassMap> _mapList;
         public MongoDbMapping()
         {
             _mapList = new List<IMongoDbClassMap>();
@@ -23,7 +22,7 @@ namespace CensusApp.Api.Core.Infra.Data.MongoDb
             {
                 item.CreateMap();
             }
-            
+
             return this;
         }
 
