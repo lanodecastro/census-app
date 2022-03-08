@@ -3,8 +3,6 @@ using CensusApp.Api.Core.Infra.Data.Queries;
 using CensusApp.Api.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using PainelOuvidoria.Api.Hubs;
 using System.Threading.Tasks;
 
 namespace CensusApp.Api.Controllers

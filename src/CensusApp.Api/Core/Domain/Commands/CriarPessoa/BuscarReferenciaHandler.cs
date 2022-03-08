@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace CensusApp.Api.Core.Domain.Commands.CriarPessoa
 {
-    public class BuscarReferencias : Notifiable<Notification>, IPipelineBehavior<CriarPessoaRequest, ICommandResponse>
+    public class BuscarReferenciaHandler : Notifiable<Notification>, IPipelineBehavior<CriarPessoaRequest, ICommandResponse>
     {
         private readonly IRepository<Escolaridade> _escolaridadeRepository;
         private readonly IRepository<RacaCor> _racaCorRepository;
         private readonly IRepository<Regiao> _regiaoRepository;
         private readonly RequestContext _context;
 
-        public BuscarReferencias(IRepository<Escolaridade> escolaridadeRepository, IRepository<RacaCor> racaCorRepository, IRepository<Regiao> regiaoRepository, RequestContext context)
+        public BuscarReferenciaHandler(IRepository<Escolaridade> escolaridadeRepository, IRepository<RacaCor> racaCorRepository, IRepository<Regiao> regiaoRepository, RequestContext context)
         {
             _escolaridadeRepository = escolaridadeRepository;
             _racaCorRepository = racaCorRepository;

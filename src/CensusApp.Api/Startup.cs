@@ -3,8 +3,8 @@ using CensusApp.Api.Config.MongoDb;
 using CensusApp.Api.Core.Domain;
 using CensusApp.Api.Core.Domain.Commands;
 using CensusApp.Api.Core.Domain.Commands.CriarPessoa;
-using CensusApp.Api.Core.Domain.requests.CriarPessoa;
 using CensusApp.Api.Core.Infra.Data.MongoDb;
+using CensusApp.Api.Hubs;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
-using PainelOuvidoria.Api.Hubs;
 using System;
 using System.Reflection;
 
@@ -55,11 +54,11 @@ namespace CensusApp.Api
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IRepository<>), typeof(MongoDbRepository<>));
 
-            services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, ValidarPessoaHandler>();
-            services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, BuscarReferencias>();
+            services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, ValidarPessoaRequestHandler>();
+            services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, BuscarReferenciaHandler>();
             services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, VincularFiliacao>();
             services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, CriarPessoaHandler>();
-            services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, Notificar>();
+            services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, NotificarPessoaCriadaHandler>();
 
 
             services.AddScoped<RequestContext>();

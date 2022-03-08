@@ -26,6 +26,7 @@ namespace CensusApp.Api.Core.Domain.Model
         }
         public Pessoa(string nome, string sobrenome, RacaCor racaCor, Escolaridade escolaridade, Regiao regiao, string idPai, string idMae)
         {
+
             AddNotifications(new Contract<Notification>()
                   .Requires()
                   .IsNotNullOrEmptyWithDefaultMessage("Nome", nome)
@@ -33,6 +34,8 @@ namespace CensusApp.Api.Core.Domain.Model
                   .IsNotNullWithDefaultMessage("RacaCor", racaCor)
                   .IsNotNullWithDefaultMessage("Escolaridade", escolaridade)
                   .IsNotNullWithDefaultMessage("Regiao", regiao)
+                  .IsNotNullOrEmptyWithDefaultMessage("IdPai", idPai)
+                  .IsNotNullOrEmptyWithDefaultMessage("IdMae", idMae)
                   );
 
             if (!IsValid) return;

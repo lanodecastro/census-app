@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace PainelOuvidoria.Api.Hubs
+namespace CensusApp.Api.Hubs
 {
     public class RealtimeMessages : Hub
     {

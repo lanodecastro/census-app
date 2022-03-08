@@ -1,20 +1,20 @@
 ﻿using AutoMapper;
 using CensusApp.Api.Core.Domain.Model;
 using CensusApp.Api.Core.Infra.Data.Queries.ViewModels;
+using CensusApp.Api.Hubs;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using PainelOuvidoria.Api.Hubs;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace CensusApp.Api.Core.Domain.Commands.CriarPessoa
 {
-    public class Notificar : IPipelineBehavior<CriarPessoaRequest, ICommandResponse>
+    public class NotificarPessoaCriadaHandler : IPipelineBehavior<CriarPessoaRequest, ICommandResponse>
     {
         private readonly IHubContext<RealtimeMessages> _hubContext;
         private readonly RequestContext _context;
         private readonly IMapper _mapper;
-        public Notificar(IHubContext<RealtimeMessages> hubContext, RequestContext context, IMapper mapper)
+        public NotificarPessoaCriadaHandler(IHubContext<RealtimeMessages> hubContext, RequestContext context, IMapper mapper)
         {
             _hubContext = hubContext;
             _context = context;

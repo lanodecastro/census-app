@@ -1,11 +1,9 @@
-﻿using CensusApp.Api.Core.Domain.Commands;
-using CensusApp.Api.Core.Domain.Commands.CriarPessoa;
-using CensusApp.Api.Core.Domain.Model;
+﻿using CensusApp.Api.Core.Domain.Model;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CensusApp.Api.Core.Domain.requests.CriarPessoa
+namespace CensusApp.Api.Core.Domain.Commands.CriarPessoa
 {
     public class CriarPessoaHandler : IPipelineBehavior<CriarPessoaRequest, ICommandResponse>
     {
