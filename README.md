@@ -26,7 +26,13 @@ O docker irá levantar 3 containers: MongoDB,backend e frontend.
 Utilize o Newman  para executar os testes a partir do terminal.
 Para instalar execute
 ``npm install -g newman``
-Utilize o arquivo census-app/integra/
+
+Execute ``newman run integra/census-app-integra.postman_collection.json``para iniciar o teste de integração.
+O propósito deste teste é garantir que a aplicação está acessível e funcional
+
+### Testando com o frontend
+Um 
+
 
 
 ## Tech
