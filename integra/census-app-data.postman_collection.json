@@ -1,0 +1,120 @@
+{
+	"info": {
+		"_postman_id": "aab3588d-a5f8-4a68-a131-62a9d2ef76c3",
+		"name": "census-app-data",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CriarPessoa",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"url_api\", \"http://localhost:8080\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\":\"{{nome}}\",\r\n    \"sobrenome\":\"{{sobrenome}}\",\r\n    \"escolaridade\":{\"id\":\"{{escolaridade}}\"},\r\n    \"racaCor\":{\"id\":\"{{racaCor}}\"},\r\n    \"regiao\":{\"id\":\"{{regiao}}\"},\r\n    \"nomePai\":\"{{nomePai}}\",\r\n    \"nomeMae\":\"{{nomeMae}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_api}}/api/pessoa",
+					"host": [
+						"{{url_api}}"
+					],
+					"path": [
+						"api",
+						"pessoa"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "nome",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "sobrenome",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "escolaridade",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "racaCor",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "regiao",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "nomePai",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "nomeMae",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "url_api",
+			"value": ""
+		}
+	]
+}

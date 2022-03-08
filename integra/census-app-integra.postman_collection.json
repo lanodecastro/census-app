@@ -1,0 +1,468 @@
+{
+	"info": {
+		"_postman_id": "3c84731c-9410-4472-9824-28519f80e195",
+		"name": "census-app-integra",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "healthckeck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Up\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url_api}}/healthcheck",
+					"host": [
+						"{{url_api}}"
+					],
+					"path": [
+						"healthcheck"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "primeira-pessoa",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request processada\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Contém pessoa 0000\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"0000\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ignoredeleteditens\":false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_api}}/api/pessoa/consultar",
+					"host": [
+						"{{url_api}}"
+					],
+					"path": [
+						"api",
+						"pessoa",
+						"consultar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "criar-pessoa",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request processada\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Retornou Id da pessoa\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\":\"Lano\",\r\n    \"sobrenome\":\"Castro\",\r\n    \"escolaridade\":{\"id\":\"ENSU\"},\r\n    \"racaCor\":{\"id\":\"BRA\"},\r\n    \"regiao\":{\"id\":\"CTO\"},\r\n    \"nomePai\":\"NA\",\r\n    \"nomeMae\":\"NA\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_api}}/api/pessoa",
+					"host": [
+						"{{url_api}}"
+					],
+					"path": [
+						"api",
+						"pessoa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "consultar-pessoa-por-raca-cor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request processada\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Encontrou pelo nome\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Lano\");\r",
+							"});\r",
+							"pm.test(\"Encontrou pelo sobrenome\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Castro\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"racaCor\":{\"id\":\"BRA\"}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_api}}/api/pessoa/consultar",
+					"host": [
+						"{{url_api}}"
+					],
+					"path": [
+						"api",
+						"pessoa",
+						"consultar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "consultar-pessoa-por-regiao",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request processada\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Encontrou pelo nome\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Lano\");\r",
+							"});\r",
+							"pm.test(\"Encontrou pelo sobrenome\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Castro\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"regiao\":{\"id\":\"CTO\"}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_api}}/api/pessoa/consultar",
+					"host": [
+						"{{url_api}}"
+					],
+					"path": [
+						"api",
+						"pessoa",
+						"consultar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "consultar-pessoa-por-escolaridade",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request processada\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Encontrou pelo nome\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Lano\");\r",
+							"});\r",
+							"pm.test(\"Encontrou pelo sobrenome\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Castro\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"escolaridade\":{\"id\":\"ENSU\"}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_api}}/api/pessoa/consultar",
+					"host": [
+						"{{url_api}}"
+					],
+					"path": [
+						"api",
+						"pessoa",
+						"consultar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "consultar-pessoa-filtro-combinado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request processada\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Encontrou pelo nome\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Lano\");\r",
+							"});\r",
+							"pm.test(\"Encontrou pelo sobrenome\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Castro\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"escolaridade\":{\"id\":\"ENSU\"},\r\n    \"racaCor\":{\"id\":\"BRA\"},\r\n    \"regiao\":{\"id\":\"CTO\"}\r\n\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_api}}/api/pessoa/consultar",
+					"host": [
+						"{{url_api}}"
+					],
+					"path": [
+						"api",
+						"pessoa",
+						"consultar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "dashboards",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request processada\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Por Região\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.regiao.length).to.greaterThan(0);\r",
+							"});\r",
+							"pm.test(\"Por Escolaridade\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.escolaridade.length).to.greaterThan(0);\r",
+							"});\r",
+							"pm.test(\"Por Raça/Cor\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.racaCor.length).to.greaterThan(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url_api}}/api/dashboard/",
+					"host": [
+						"{{url_api}}"
+					],
+					"path": [
+						"api",
+						"dashboard",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "consultar-genealogia",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"0000\",\r\n    \"nivel\":2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_api}}/api/pessoa/genealogia",
+					"host": [
+						"{{url_api}}"
+					],
+					"path": [
+						"api",
+						"pessoa",
+						"genealogia"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "consultar-percentual",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"regiao\":{\"id\":\"CTO\"}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_api}}/api/pessoa/percentual",
+					"host": [
+						"{{url_api}}"
+					],
+					"path": [
+						"api",
+						"pessoa",
+						"percentual"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url_api",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

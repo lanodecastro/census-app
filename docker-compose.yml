@@ -35,23 +35,20 @@ services:
         - mongodb_network
      ports:
        - "8080:80"
-       - "8081:443"  
+       - "8081:443"
+   frontend:
+     depends_on:
+       - censusApp
+     image: censusappfrontend
+     restart: always
+     container_name: censusAppFrontEnd
+     build:
+       context: ../census-app-frontend
+     networks:
+        - mongodb_network
+     ports:
+       - "80:80"
 networks:
     mongodb_network:
           name: mongodb_network
           driver: bridge
-
-
-
-    #  frontend:
-  #    depends_on:
-  #      - censusApp
-  #    image: censusappfrontend
-  #    restart: always
-  #    container_name: censusAppFrontEnd
-  #    build:
-  #      context: ../census-app-frontend
-  #    networks:
-  #       - mongodb_network
-  #    ports:
-  #      - "80:80"
