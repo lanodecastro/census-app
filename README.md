@@ -31,7 +31,14 @@ Execute ``newman run integra/census-app-integra.postman_collection.json``para in
 O propósito deste teste é garantir que a aplicação está acessível e funcional
 
 ### Testando com o frontend
-Um 
+Um dos requisitos exigidos no desafio é disponibilizar um dashboard que permita visualizar a criação de novos cadastros em tempo real.
+Para que a entrada de dados seja feita com agilizada, foi disponilizado um arquivo para servir de entrada de dados a partir do Newman ou Postman.
+
+ - Acesse o endereço http://localhost usando deu browser de preferência
+ - No terminal de comando, execute ```newman run integra/census-app-data.postman_collection.json -d integra/data.json --delay-request 3000```
+
+>O parâmetro --delay-request define o tempo de intervalo entre as requisições. Para uma melhor experiência na vizualização do dashboard, foi configurado para 3 segundos,
+>mas você pode ajustar conforme desejar
 
 
 
