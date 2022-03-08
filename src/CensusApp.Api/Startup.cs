@@ -1,6 +1,9 @@
 using CensusApp.Api.Config.AutoMapper;
 using CensusApp.Api.Config.MongoDb;
 using CensusApp.Api.Core.Domain;
+using CensusApp.Api.Core.Domain.Commands;
+using CensusApp.Api.Core.Domain.Commands.CriarPessoa;
+using CensusApp.Api.Core.Domain.requests.CriarPessoa;
 using CensusApp.Api.Core.Infra.Data.MongoDb;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -18,9 +21,16 @@ namespace CensusApp.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
+
         }
 
         public IConfiguration Configuration { get; }
@@ -45,6 +55,14 @@ namespace CensusApp.Api
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IRepository<>), typeof(MongoDbRepository<>));
 
+            services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, ValidarPessoaHandler>();
+            services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, BuscarReferencias>();
+            services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, VincularFiliacao>();
+            services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, CriarPessoaHandler>();
+            services.AddScoped<IPipelineBehavior<CriarPessoaRequest, ICommandResponse>, Notificar>();
+
+
+            services.AddScoped<RequestContext>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

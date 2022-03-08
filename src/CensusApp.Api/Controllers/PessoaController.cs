@@ -1,14 +1,10 @@
-﻿using AutoMapper;
-using CensusApp.Api.Core.Domain.Commands.CriarPessoa;
-using CensusApp.Api.Core.Domain.Model;
+﻿using CensusApp.Api.Core.Domain.Commands.CriarPessoa;
 using CensusApp.Api.Core.Infra.Data.Queries;
-using CensusApp.Api.Core.Infra.Data.Queries.ViewModels;
+using CensusApp.Api.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using MongoDB.Driver;
 using PainelOuvidoria.Api.Hubs;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CensusApp.Api.Controllers
@@ -17,32 +13,24 @@ namespace CensusApp.Api.Controllers
     [ApiController]
     public class PessoaController : ControllerBase
     {
-        private readonly IMediator _mediator;       
-        private readonly IHubContext<RealtimeMessages> _hubContext;
+        private readonly IMediator _mediator;
 
-        public PessoaController(IMediator mediator, IHubContext<RealtimeMessages> hubContext)
+        public PessoaController(IMediator mediator)
         {
             _mediator = mediator;
-            _hubContext = hubContext;
         }
 
         [HttpPost, Route("")]
         public async Task<IActionResult> CriarPessoaRequest([FromBody] CriarPessoaRequest command)
         {
-            await _mediator.Send(command);
-
-            if (!command.IsValid)
-                return BadRequest(command.Notifications);
-
-            await _hubContext.Clients.All.SendAsync("notify",command.Response);
-
-            return Ok(command.Response);
+            var response = await _mediator.Send(command);
+            return response.CreateHttpResponse();
         }
 
-        [HttpPost,Route("query")]
+        [HttpPost, Route("query")]
         public async Task<IActionResult> ConsultarPessoa([FromBody] ConsultarPessoa query)
         {
-            var result=await _mediator.Send(query);
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
@@ -54,5 +42,14 @@ namespace CensusApp.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet, Route("arvore")]
+        public async Task<IActionResult> ConsultarArvoreGenealogica()
+        {
+            var command = new ConsultarArvoreGenealogica();
+
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
     }
 }

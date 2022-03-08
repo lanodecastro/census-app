@@ -11,5 +11,22 @@ services:
      container_name: mongoDb
      volumes:
             - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+     networks:
+        - mongodb_network
      ports: 
         - "27017:27017"
+   censusApp:
+     depends_on:
+       - mongodb
+     image: censusapp
+     restart: always
+     container_name: censusApp
+     build:
+       context: src/CensusApp.Api/
+     networks:
+        - mongodb_network
+     ports:
+       - "8080:80"
+networks:
+   mongodb_network:
+     name: mongodb_network

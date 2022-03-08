@@ -1,4 +1,4 @@
-﻿namespace CensusApp.Api.Core.Domain.Commands._Base
+﻿namespace CensusApp.Api.Core.Domain.Commands
 {
     public class CommandID<T>
     {

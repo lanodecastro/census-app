@@ -25,12 +25,13 @@ namespace CensusApp.Api.Controllers
             var query = new ConsultarPessoa();
             var response = await _mediator.Send(query);
 
+
             var data = new
             {
-                regiao = await Select(response.GroupBy(x => x.Regiao)),
-                escolaridade = await Select(response.GroupBy(x => x.Escolaridade)),
-                racaCor = await Select(response.GroupBy(x => x.RacaCor)),
-                total = response.Count()
+                regiao = await Select(response.Rows.GroupBy(x => x.Regiao)),
+                escolaridade = await Select(response.Rows.GroupBy(x => x.Escolaridade)),
+                racaCor = await Select(response.Rows.GroupBy(x => x.RacaCor)),
+                total = response.Rows.Count()
             };
 
             return Ok(data);

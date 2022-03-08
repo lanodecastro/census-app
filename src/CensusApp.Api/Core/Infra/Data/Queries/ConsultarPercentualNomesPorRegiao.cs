@@ -1,7 +1,6 @@
-﻿using CensusApp.Api.Core.Domain.Commands._Base;
+﻿using CensusApp.Api.Core.Domain.Commands;
 using CensusApp.Api.Core.Domain.Model;
 using CensusApp.Api.Core.Infra.Data.MongoDb.Extensions;
-using CensusApp.Api.Core.Infra.Data.Queries.Extensions;
 using MediatR;
 using MongoDB.Driver;
 using System.Linq;
@@ -33,7 +32,7 @@ namespace CensusApp.Api.Core.Infra.Data.Queries
                     {
                         Nome = n.Key,
                         Percent = n.Count() * 100 / queryPorRegiao.Count()
-                    });              
+                    });
 
                 return Task.FromResult<object>(group);
 
