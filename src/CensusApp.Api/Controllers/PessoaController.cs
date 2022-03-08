@@ -25,14 +25,14 @@ namespace CensusApp.Api.Controllers
             return response.CreateHttpResponse();
         }
 
-        [HttpPost, Route("query")]
+        [HttpPost, Route("consultar")]
         public async Task<IActionResult> ConsultarPessoa([FromBody] ConsultarPessoa query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);
         }
 
-        [HttpPost, Route("query2")]
+        [HttpPost, Route("percentual")]
         public async Task<IActionResult> ConsultarPercentualNomesPorRegiao([FromBody] ConsultarPercentualNomesPorRegiao query)
         {
             var result = await _mediator.Send(query);
@@ -40,11 +40,9 @@ namespace CensusApp.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet, Route("arvore")]
-        public async Task<IActionResult> ConsultarArvoreGenealogica()
+        [HttpPost, Route("genealogia")]
+        public async Task<IActionResult> ConsultarArvoreGenealogica([FromBody] ConsultarArvoreGenealogica command)
         {
-            var command = new ConsultarArvoreGenealogica();
-
             var result = await _mediator.Send(command);
 
             return Ok(result);
