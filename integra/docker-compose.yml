@@ -1,0 +1,14 @@
+﻿version: '3.6'
+
+services:
+   postman_checks:
+      container_name: restful_booker_checks
+      build: . 
+      image: postman_checks
+      networks:
+        - mongodb_network
+      command:
+        run https://www.getpostman.com/collections/fd0259bbb8fe5780b57d
+networks:
+  mongodb_network:
+    external: true

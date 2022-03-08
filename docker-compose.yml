@@ -9,6 +9,7 @@ services:
        MONGO_INITDB_DATABASE: dbCensusApp
      restart: always
      container_name: mongoDb
+     hostname: mongoDb
      volumes:
             - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
      networks:
@@ -19,14 +20,38 @@ services:
      depends_on:
        - mongodb
      image: censusapp
+     environment:
+        ASPNETCORE_URLS: https://+:443;http://+:80
+        ASPNETCORE_Kestrel__Certificates__Default__Password: dotnethttps
+        ASPNETCORE_Kestrel__Certificates__Default__Path: /mnt/https/aspnetapp.pfx 
      restart: always
      container_name: censusApp
+     hostname: censusapp
+     volumes:
+        - ./aspnetapp.pfx:/mnt/https/aspnetapp.pfx
      build:
        context: src/CensusApp.Api/
      networks:
         - mongodb_network
      ports:
        - "8080:80"
+       - "8081:443"  
 networks:
-   mongodb_network:
-     name: mongodb_network
+    mongodb_network:
+          name: mongodb_network
+          driver: bridge
+
+
+
+    #  frontend:
+  #    depends_on:
+  #      - censusApp
+  #    image: censusappfrontend
+  #    restart: always
+  #    container_name: censusAppFrontEnd
+  #    build:
+  #      context: ../census-app-frontend
+  #    networks:
+  #       - mongodb_network
+  #    ports:
+  #      - "80:80"

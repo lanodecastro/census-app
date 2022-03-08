@@ -40,7 +40,7 @@ namespace CensusApp.Api
             {
                 options.AddPolicy("CorsPolicy", builder =>
                 {
-                    string[] origins = { "http://localhost:4200" };
+                    string[] origins = { "http://localhost:4200;http://localhost" };
                     builder
                         .WithOrigins(origins)
                         .AllowAnyMethod()
@@ -81,11 +81,9 @@ namespace CensusApp.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CensusApp v1"));
             }
 
-            //app.UseHttpsRedirection();
-
             app.UseWebSockets(new WebSocketOptions
             {
-                KeepAliveInterval = TimeSpan.FromSeconds(120),
+                KeepAliveInterval = TimeSpan.FromSeconds(120)
             });
 
             app.UseRouting();
