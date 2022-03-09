@@ -30,7 +30,7 @@ services:
      volumes:
         - ./aspnetapp.pfx:/mnt/https/aspnetapp.pfx
      build:
-       context: src/CensusApp.Api/
+       context: src/
      networks:
         - mongodb_network
      ports:
