@@ -24,7 +24,6 @@ services:
         ASPNETCORE_URLS: https://+:443;http://+:80
         ASPNETCORE_Kestrel__Certificates__Default__Password: dotnethttps
         ASPNETCORE_Kestrel__Certificates__Default__Path: /app/https/aspnetapp.pfx 
-     restart: always
      container_name: censusApp
      hostname: censusapp
      volumes:
