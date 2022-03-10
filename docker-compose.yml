@@ -23,12 +23,12 @@ services:
      environment:
         ASPNETCORE_URLS: https://+:443;http://+:80
         ASPNETCORE_Kestrel__Certificates__Default__Password: dotnethttps
-        ASPNETCORE_Kestrel__Certificates__Default__Path: /mnt/https/aspnetapp.pfx 
+        ASPNETCORE_Kestrel__Certificates__Default__Path: /app/https/aspnetapp.pfx 
      restart: always
      container_name: censusApp
      hostname: censusapp
      volumes:
-        - ./aspnetapp.pfx:/mnt/https/aspnetapp.pfx
+        - ./aspnetapp.pfx:/app/https/aspnetapp.pfx
      build:
        context: src/
      networks:
@@ -43,7 +43,7 @@ services:
      restart: always
      container_name: censusAppFrontEnd
      build:
-       context: ../census-app-frontend
+       context: ../censusapp-frontend
      networks:
         - mongodb_network
      ports:
