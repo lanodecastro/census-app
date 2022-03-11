@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master   
-  
+    - uses: actions/checkout@master     
 
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
@@ -29,10 +28,19 @@ jobs:
       run: dotnet test src/CensusApp.Test
     
     - name: Docker compose Up
-      run: docker-compose -f docker-compose-ci.yml up --build
+      run: docker-compose -f docker-compose-ci.yml up --build -d  
 
-    - name: Docker compode Down
-      run: docker-compose -f docker-compose-ci.yml down
+    - name: Install Newman
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - run: npm install -g newman
+
+    - name: Run request tests
+      run: newman run integra/census-app-integra.postman_collection.json
+    
+    - name: Docker compose Down
+      run: docker-compose -f docker-compose-ci.yml down 
 
    
 
